@@ -36,7 +36,6 @@ for i in range(30):
     else:
         leap = 365
     #ループ（日）
-    #不快指数の65~70までの日数を変数countに加算していく
     for d in range(leap):
         tmp = 0
         hum = 0
@@ -53,18 +52,17 @@ for i in range(30):
             hot_count += 1
         elif disc >= 85:
             too_hot_count += 1
-    #それぞれの値に重みを付けて独自のポイントに仕上げる。
-    #weight_point  = warm_count + (hot_count*2) + (too_hot_count*3)
-    #変数conntの値をリスト型の変数d_iに格納する。
-    l_h_t_h.append(hot_count + too_hot_count)
-    l_warm.append(warm_count)
-    l_hot.append(hot_count)
-    l_too_hot.append(too_hot_count)
-    l_warm_high.append(warm_count)
-    l_hot_high.append(warm_count + hot_count)
-    l_too_hot_high.append(warm_count + hot_count + too_hot_count)
+    #それぞれの変数に格納（リスト）
+    l_h_t_h.append(hot_count + too_hot_count) #不快指数上位の日数
+    l_warm.append(warm_count) #75~79の日数
+    l_hot.append(hot_count) #80~84の日数
+    l_too_hot.append(too_hot_count) #85~の日数
+    #テキストを表示する高さを決めるための変数
+    l_warm_high.append(warm_count)  #75~79の高さ
+    l_hot_high.append(warm_count + hot_count) #80~84の高さ
+    l_too_hot_high.append(warm_count + hot_count + too_hot_count) #85~の高さ
 
-    #print(l_too_hot_high)
+#テキストの表示
 for x, y, z in zip(year, l_warm_high,l_too_hot_high):
     plt.text(x, round(y/2,0), str(y), ha='center', va='bottom')
     plt.text(x,90,str(x)+"\ntotal\n"+str(z))
@@ -76,15 +74,17 @@ if too_hot_count == 0:
         if z != 0:
             plt.text(x, y-round(z/2,0), z, ha='center', va='bottom')
 plt.title("hotday 1989 - 2018")
+#不快指数75以上の日を色分けして積み上げ棒グラフにする。
 p1 = plt.bar(year,l_warm,color="orange")
 p2 = plt.bar(year,l_hot,color="#FF5B70",bottom=l_warm)
 p3 = plt.bar(year,l_too_hot,color="red",bottom=l_hot_high,align="center")
+#表示する範囲を指定
 plt.plot(1989, 100)
-
+#グラフの表示
 plt.show()
-
+#不快指数80以上の日をまとめて棒グラフで表示する。
 for x, y in zip(year,l_h_t_h):
     plt.text(x,39,str(x)+"\n"+str(y),ha='center', va='bottom')
 p4 = plt.bar(year,l_h_t_h)
-
+#グラフの表示
 plt.show()
